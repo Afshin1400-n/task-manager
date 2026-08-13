@@ -1,99 +1,108 @@
-"use client"
-import { useState, useEffect } from "react";
-import Task from "./component/Task";
-import Modal from "./component/Modal"
+// app/login/page.tsx
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
+export default function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-export default function Home() {
-const [isOpen , setIsOpen]= useState(false)
-const [tasks, setTasks] = useState([]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const user = users.find(u => u.username === username && u.password === password);
 
- const handleAdd = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
-
-  // ✅ تابع افزودن تسک - اینجا
-  const handleAddTask = (newTask) => {
-    setTasks([...tasks, { id: Date.now(), ...newTask }]);
-    setIsOpen(false); // بستن مودال بعد از افزودن
+    if (user) {
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      router.push("/home");
+    } else {
+      setError("نام کاربری یا رمز عبور اشتباه است");
+      setTimeout(() => {
+        setError("")     
+      }, 2000);
+    }
+    setLoading(false);
   };
 
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 p-4">
-      <div className="max-w-7xl mx-auto">
-        
-  {isOpen && <Modal isOpen={isOpen} onClose={handleClose} onAddTask={handleAddTask}/>}
-
-        {/* هدر */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              📋 تسک‌های من
+    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900
+     flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
+          <div className="text-center mb-6">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              🔐 ورود
             </h1>
-            <span className="bg-purple-100 text-purple-600 text-xs px-3 py-1 rounded-full font-semibold">
-              ۳ تسک
-            </span>
+            <p className="text-purple-200/70 text-sm mt-2">
+              برای ادامه وارد شوید
+            </p>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="bg-white/80 text-gray-700 px-4 py-2 rounded-xl hover:bg-white shadow-sm hover:shadow-md transition-all text-sm font-medium">
-              👤 پروفایل
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-purple-200/80 text-sm font-medium mb-2">
+                نام کاربری
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="نام کاربری خود را وارد کنید..."
+                className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl 
+                focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 outline-none 
+                text-white/90 placeholder:text-white/30 transition-all"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-purple-200/80 text-sm font-medium mb-2">
+                رمز عبور
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="رمز عبور خود را وارد کنید..."
+                className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl 
+                focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 outline-none 
+                text-white/90 placeholder:text-white/30 transition-all"
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="p-3 bg-red-500/20 border border-red-400/30 rounded-xl text-red-400 text-sm text-center">
+                ❌ {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 
+              hover:from-purple-600 hover:to-pink-600 active:scale-95
+              text-white font-bold rounded-xl transition-all duration-200 
+              shadow-md hover:shadow-lg disabled:opacity-40 cursor-pointer"
+            >
+              {loading ? "⏳ در حال ورود..." : "🚀 ورود"}
             </button>
-            <button className="text-gray-500 hover:text-red-500 transition-all text-sm font-medium">
-              🚪 خروج
-            </button>
-          </div>
+          </form>
+
+          <p className="text-center text-purple-200/60 text-sm mt-6">
+            حساب کاربری ندارید؟{" "}
+            <Link href="/register" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+              ثبت‌نام
+            </Link>
+          </p>
         </div>
-
-        {/* دکمه افزودن تسک */}
-        <div className="mb-6">
-          <button onClick={handleAdd}
-           className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 
-            hover:from-purple-600 hover:to-pink-600 active:scale-95
-            text-white font-bold rounded-xl transition-all duration-200 
-            shadow-md hover:shadow-lg text-sm">
-            ➕ افزودن تسک جدید
-          </button>
-        </div>
-
-        {/* فیلترها */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <button className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-sm font-semibold shadow-md">
-            همه
-          </button>
-          <button className="px-4 py-2 bg-white/80 text-gray-600 hover:bg-white hover:shadow-md rounded-lg text-sm font-semibold transition-all">
-            📌 انجام نشده
-          </button>
-          <button className="px-4 py-2 bg-white/80 text-gray-600 hover:bg-white hover:shadow-md rounded-lg text-sm font-semibold transition-all">
-            ⏳ در حال انجام
-          </button>
-          <button className="px-4 py-2 bg-white/80 text-gray-600 hover:bg-white hover:shadow-md rounded-lg text-sm font-semibold transition-all">
-            ✅ انجام شده
-          </button>
-        </div>
-
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {tasks.map((task) => (
-            <Task 
-              key={task.id}
-              title={task.title}
-              status={task.status}
-              priority={task.priority}
-              description={task.description}
-              dueDate={task.dueDate}
-            />
-          ))}
-        </div>
-
-        {/* ✅ پیام خالی - وقتی تسکی نباشه */}
-        {tasks.length === 0 && (
-          <div className="text-center text-gray-400 py-16">
-            <div className="text-6xl mb-4">📭</div>
-            <p className="text-lg font-medium">هنوز تسکی اضافه نکردی!</p>
-            <p className="text-sm">اولین تسک خود را اضافه کن</p>
-          </div>
-        )}
-
       </div>
     </div>
   );
