@@ -1,48 +1,99 @@
+// app/page.tsx
 "use client"
 import { useState, useEffect } from "react";
 import Task from "../component/Task";
 import Modal from "../component/Modal";
 import { useRouter } from "next/navigation";
 
-
 export default function Home() {
-const [isOpen , setIsOpen]= useState(false)
-const [tasks, setTasks] = useState([]);
-const [user, setUser] = useState(null);
- const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [user, setUser] = useState(null);
+  const [editingTask, setEditingTask] = useState(null); // ✅ تسک در حال ویرایش
+  const router = useRouter();
 
-
-useEffect(() => {
+  useEffect(() => {
     const currentUser = localStorage.getItem("currentUser");
     if (currentUser) {
       setUser(JSON.parse(currentUser));
     }
   }, []);
 
-  const handleLogout = (): void => {
+  const handleLogout = () => {
     localStorage.removeItem("currentUser");
     router.push("/");
   };
 
- const handleAdd = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
+  const handleAdd = () => {
+    setEditingTask(null); // ✅ ریست ویرایش
+    setIsOpen(true);
+  };
 
-const handleDeleteTask = (taskId) => {
+  const handleClose = () => {
+    setIsOpen(false);
+    setEditingTask(null); // ✅ ریست ویرایش
+  };
+
+  const handleDeleteTask = (taskId) => {
     setTasks(tasks.filter((task) => task.id !== taskId));
   };
 
-  // ✅ تابع افزودن تسک - اینجا
   const handleAddTask = (newTask) => {
     setTasks([...tasks, { id: Date.now(), ...newTask }]);
-    setIsOpen(false); // بستن مودال بعد از افزودن
+    setIsOpen(false);
   };
 
+  // ✅ تابع ویرایش تسک
+  const handleEditTask = (updatedTask) => {
+    setTasks(tasks.map((task) => 
+      task.id === updatedTask.id ? updatedTask : task
+    ));
+    setIsOpen(false);
+    setEditingTask(null);
+  };
+
+  // ✅ باز کردن مودال برای ویرایش
+  const handleEdit = (task) => {
+    setEditingTask(task);
+    setIsOpen(true);
+  };
+
+  // تسک‌های نمونه
+  useEffect(() => {
+    if (tasks.length === 0) {
+      setTasks([
+        {
+          id: 1,
+          title: "طراحی داشبورد",
+          description: "طراحی داشبورد مدیریت تسک‌ها با Tailwind",
+          priority: "HIGH",
+          status: "IN_PROGRESS",
+          dueDate: "2024-05-20"
+        },
+        {
+          id: 2,
+          title: "نوشتن مستندات",
+          description: "نوشتن مستندات پروژه برای گیت‌هاب",
+          priority: "MEDIUM",
+          status: "TODO",
+          dueDate: "2024-05-25"
+        }
+      ]);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 p-4">
       <div className="max-w-7xl mx-auto">
         
-  {isOpen && <Modal isOpen={isOpen} onClose={handleClose} onAddTask={handleAddTask}/>}
+        {/* ✅ مودال با پشتیبانی از ویرایش */}
+        <Modal 
+          isOpen={isOpen} 
+          onClose={handleClose} 
+          onAddTask={handleAddTask}
+          onEditTask={handleEditTask}
+          editingTask={editingTask}
+        />
 
         {/* هدر */}
         <div className="flex items-center justify-between mb-8">
@@ -51,15 +102,14 @@ const handleDeleteTask = (taskId) => {
               📋 تسک‌های من
             </h1>
             <span className="bg-purple-100 text-purple-600 text-xs px-3 py-1 rounded-full font-semibold">
-              ۳ تسک
+              {tasks.length} تسک
             </span>
           </div>
           <div className="flex items-center gap-3">
             <button className="bg-white/80 text-gray-700 px-4 py-2 rounded-xl hover:bg-white shadow-sm hover:shadow-md transition-all text-sm font-medium">
               👤 {user?.username}
             </button>
-            <button onClick={handleLogout}
-            className="text-gray-500 hover:text-red-500 transition-all text-sm font-medium">
+            <button onClick={handleLogout} className="text-gray-500 hover:text-red-500 transition-all text-sm font-medium">
               🚪 خروج
             </button>
           </div>
@@ -67,8 +117,7 @@ const handleDeleteTask = (taskId) => {
 
         {/* دکمه افزودن تسک */}
         <div className="mb-6">
-          <button onClick={handleAdd}
-           className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 
+          <button onClick={handleAdd} className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 
             hover:from-purple-600 hover:to-pink-600 active:scale-95
             text-white font-bold rounded-xl transition-all duration-200 
             shadow-md hover:shadow-lg text-sm">
@@ -92,7 +141,8 @@ const handleDeleteTask = (taskId) => {
           </button>
         </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* لیست تسک‌ها */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tasks.map((task) => (
             <Task 
               key={task.id}
@@ -102,12 +152,13 @@ const handleDeleteTask = (taskId) => {
               priority={task.priority}
               description={task.description}
               dueDate={task.dueDate}
-              onDelete={handleDeleteTask} 
+              onDelete={handleDeleteTask}
+              onEdit={() => handleEdit(task)} // ✅ پاس دادن تابع ویرایش
             />
           ))}
         </div>
 
-        {/* ✅ پیام خالی - وقتی تسکی نباشه */}
+        {/* پیام خالی */}
         {tasks.length === 0 && (
           <div className="text-center text-gray-400 py-16">
             <div className="text-6xl mb-4">📭</div>

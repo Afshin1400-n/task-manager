@@ -1,32 +1,55 @@
+// component/Modal.tsx
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function Modal({ onClose, onAddTask }) {
-  // ✅ داده‌های فرم - اینجا
+export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingTask }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("MEDIUM");
   const [status, setStatus] = useState("IN_PROGRESS");
   const [dueDate, setDueDate] = useState("");
 
+  // ✅ پر کردن فرم با داده‌های تسک برای ویرایش
+  useEffect(() => {
+    if (editingTask) {
+      setTitle(editingTask.title || "");
+      setDescription(editingTask.description || "");
+      setPriority(editingTask.priority || "MEDIUM");
+      setStatus(editingTask.status || "IN_PROGRESS");
+      setDueDate(editingTask.dueDate || "");
+    } else {
+      // ریست فرم وقتی مودال بسته میشه
+      setTitle("");
+      setDescription("");
+      setPriority("MEDIUM");
+      setStatus("IN_PROGRESS");
+      setDueDate("");
+    }
+  }, [editingTask, isOpen]);
+
+  if (!isOpen) return null;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // ارسال داده به کامپوننت اصلی
-    onAddTask({
+    const taskData = {
       title,
       description,
       priority,
       status,
       dueDate,
-    });
+    };
 
-    // ریست فرم (اختیاری)
-    setTitle("");
-    setDescription("");
-    setPriority("MEDIUM");
-    setStatus("IN_PROGRESS");
-    setDueDate("");
+    if (editingTask) {
+      // ✅ حالت ویرایش
+      onEditTask({ ...taskData, id: editingTask.id });
+    } else {
+      // ✅ حالت افزودن
+      onAddTask(taskData);
+    }
+
+    // بستن مودال
+    onClose();
   };
 
   return (
@@ -36,7 +59,7 @@ export default function Modal({ onClose, onAddTask }) {
         {/* هدر */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            ➕ تسک جدید
+            {editingTask ? "✏️ ویرایش تسک" : "➕ تسک جدید"}
           </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-all text-2xl">
             ✕
@@ -46,7 +69,6 @@ export default function Modal({ onClose, onAddTask }) {
         {/* فرم */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
-          {/* عنوان */}
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2">
               📌 عنوان تسک
@@ -63,7 +85,6 @@ export default function Modal({ onClose, onAddTask }) {
             />
           </div>
 
-          {/* توضیحات */}
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2">
               📝 توضیحات
@@ -79,7 +100,6 @@ export default function Modal({ onClose, onAddTask }) {
             />
           </div>
 
-          {/* اولویت */}
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2">
               🎯 اولویت
@@ -97,7 +117,6 @@ export default function Modal({ onClose, onAddTask }) {
             </select>
           </div>
 
-          {/* وضعیت */}
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2">
               📊 وضعیت
@@ -115,7 +134,6 @@ export default function Modal({ onClose, onAddTask }) {
             </select>
           </div>
 
-          {/* تاریخ سررسید */}
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2">
               📅 تاریخ سررسید
@@ -130,7 +148,6 @@ export default function Modal({ onClose, onAddTask }) {
             />
           </div>
 
-          {/* دکمه‌ها */}
           <div className="flex gap-3 pt-2">
             <button
               type="button"
@@ -146,7 +163,7 @@ export default function Modal({ onClose, onAddTask }) {
               text-white font-bold rounded-xl transition-all duration-200 
               shadow-md hover:shadow-lg"
             >
-              ✅ افزودن تسک
+              {editingTask ? "💾 ذخیره تغییرات" : "✅ افزودن تسک"}
             </button>
           </div>
         </form>
