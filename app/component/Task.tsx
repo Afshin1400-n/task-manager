@@ -1,6 +1,13 @@
 "use client"
 
-function Task({title,description,priority,dueDate,status}) {
+function Task({id,title,description,priority,dueDate,status,onDelete}) {
+
+ const handleDeleteTask = () => {
+    if (onDelete) {
+      onDelete(id); // ✅ پاس دادن id به تابع حذف
+    }
+  };
+
   return (
       <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-purple-100 hover:shadow-lg hover:border-purple-200 transition-all">
             <div className="flex items-start justify-between mb-2">
@@ -18,7 +25,11 @@ function Task({title,description,priority,dueDate,status}) {
               <button className="flex-1 text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all font-medium">
                 ✏️ ویرایش
               </button>
-              <button className="flex-1 text-xs px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all font-medium">
+
+              <button onClick={handleDeleteTask}
+               className="flex-1 text-xs 
+              px-3 py-1.5 bg-red-50 text-red-600 
+              rounded-lg hover:bg-red-100 transition-all font-medium">
                 🗑️ حذف
               </button>
             </div>

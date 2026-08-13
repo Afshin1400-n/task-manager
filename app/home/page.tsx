@@ -27,6 +27,10 @@ useEffect(() => {
  const handleAdd = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
+const handleDeleteTask = (taskId) => {
+    setTasks(tasks.filter((task) => task.id !== taskId));
+  };
+
   // ✅ تابع افزودن تسک - اینجا
   const handleAddTask = (newTask) => {
     setTasks([...tasks, { id: Date.now(), ...newTask }]);
@@ -92,11 +96,13 @@ useEffect(() => {
           {tasks.map((task) => (
             <Task 
               key={task.id}
+              id={task.id}
               title={task.title}
               status={task.status}
               priority={task.priority}
               description={task.description}
               dueDate={task.dueDate}
+              onDelete={handleDeleteTask} 
             />
           ))}
         </div>
