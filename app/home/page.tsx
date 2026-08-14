@@ -1,9 +1,10 @@
 // app/page.tsx
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Task from "../component/Task";
 import Modal from "../component/Modal";
 import { useRouter } from "next/navigation";
+import BtnFilter from "../component/BtnFilter";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +12,7 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [editingTask, setEditingTask] = useState(null); // ✅ تسک در حال ویرایش
   const router = useRouter();
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const currentUser = localStorage.getItem("currentUser");
@@ -39,6 +41,8 @@ export default function Home() {
   };
 
   const handleAddTask = (newTask) => {
+    console.log(newTask);
+    
     setTasks([...tasks, { id: Date.now(), ...newTask }]);
     setIsOpen(false);
   };
@@ -58,29 +62,13 @@ export default function Home() {
     setIsOpen(true);
   };
 
-  // تسک‌های نمونه
-  useEffect(() => {
-    if (tasks.length === 0) {
-      setTasks([
-        {
-          id: 1,
-          title: "طراحی داشبورد",
-          description: "طراحی داشبورد مدیریت تسک‌ها با Tailwind",
-          priority: "HIGH",
-          status: "IN_PROGRESS",
-          dueDate: "2024-05-20"
-        },
-        {
-          id: 2,
-          title: "نوشتن مستندات",
-          description: "نوشتن مستندات پروژه برای گیت‌هاب",
-          priority: "MEDIUM",
-          status: "TODO",
-          dueDate: "2024-05-25"
-        }
-      ]);
-    }
-  }, []);
+ // ✅ فیلتر کردن تسک‌ها
+  const filteredTasks = useMemo(() => {
+    if (filter === "ALL") return tasks;
+    return tasks.filter((task) => task.status === filter);
+  }, [tasks, filter]);
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 p-4">
@@ -102,7 +90,7 @@ export default function Home() {
               📋 تسک‌های من
             </h1>
             <span className="bg-purple-100 text-purple-600 text-xs px-3 py-1 rounded-full font-semibold">
-              {tasks.length} تسک
+              {filteredTasks.length} تسک
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -126,24 +114,16 @@ export default function Home() {
         </div>
 
         {/* فیلترها */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <button className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-sm font-semibold shadow-md">
-            همه
-          </button>
-          <button className="px-4 py-2 bg-white/80 text-gray-600 hover:bg-white hover:shadow-md rounded-lg text-sm font-semibold transition-all">
-            📌 انجام نشده
-          </button>
-          <button className="px-4 py-2 bg-white/80 text-gray-600 hover:bg-white hover:shadow-md rounded-lg text-sm font-semibold transition-all">
-            ⏳ در حال انجام
-          </button>
-          <button className="px-4 py-2 bg-white/80 text-gray-600 hover:bg-white hover:shadow-md rounded-lg text-sm font-semibold transition-all">
-            ✅ انجام شده
-          </button>
-        </div>
+<div className="flex flex-wrap gap-2 mb-6">
+  <BtnFilter text="همه" filter={filter} setFilter={setFilter} value="ALL" />
+  <BtnFilter text="📌 انجام نشده" filter={filter} setFilter={setFilter} value="TODO" />
+  <BtnFilter text="⏳ در حال انجام" filter={filter} setFilter={setFilter} value="IN_PROGRESS" />
+  <BtnFilter text="✅ انجام شده" filter={filter} setFilter={setFilter} value="DONE" />
+</div>
 
         {/* لیست تسک‌ها */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {tasks.map((task) => (
+          {filteredTasks.map((task) => (
             <Task 
               key={task.id}
               id={task.id}
@@ -159,7 +139,7 @@ export default function Home() {
         </div>
 
         {/* پیام خالی */}
-        {tasks.length === 0 && (
+        {filteredTasks.length === 0 && (
           <div className="text-center text-gray-400 py-16">
             <div className="text-6xl mb-4">📭</div>
             <p className="text-lg font-medium">هنوز تسکی اضافه نکردی!</p>
