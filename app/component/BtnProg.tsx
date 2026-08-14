@@ -1,13 +1,13 @@
 // component/BtnFilter.tsx
 "use client";
 
-export default function BtnFilter({ text, filter, setFilter, value }) {
-  const isActive = filter === value;
+export default function BtnProg({ text, filterProg, setFilterProg, value }) {
+  const isActive = filterProg === value;
 
   return (
     <button 
     type="button"
-      onClick={() => setFilter(value)}
+      onClick={() => setFilterProg(value)}
       className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
         isActive 
           ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md" 

@@ -5,6 +5,8 @@ import Task from "../component/Task";
 import Modal from "../component/Modal";
 import { useRouter } from "next/navigation";
 import BtnFilter from "../component/BtnFilter";
+import BtnProg from "../component/BtnProg";
+
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +14,8 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [editingTask, setEditingTask] = useState(null); // ✅ تسک در حال ویرایش
   const router = useRouter();
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("ALL");
+  const [filterProg, setFilterProg] = useState("ALL");
 
   useEffect(() => {
     const currentUser = localStorage.getItem("currentUser");
@@ -31,6 +34,10 @@ export default function Home() {
     setIsOpen(true);
   };
 
+const handleDeleteAll =()=>{
+  setTasks([])
+}
+
   const handleClose = () => {
     setIsOpen(false);
     setEditingTask(null); // ✅ ریست ویرایش
@@ -41,7 +48,7 @@ export default function Home() {
   };
 
   const handleAddTask = (newTask) => {
-    console.log(newTask);
+
     
     setTasks([...tasks, { id: Date.now(), ...newTask }]);
     setIsOpen(false);
@@ -64,9 +71,20 @@ export default function Home() {
 
  // ✅ فیلتر کردن تسک‌ها
   const filteredTasks = useMemo(() => {
-    if (filter === "ALL") return tasks;
-    return tasks.filter((task) => task.status === filter);
-  }, [tasks, filter]);
+    let result = tasks;
+
+    // فیلتر بر اساس وضعیت (status)
+    if (filter !== "ALL") {
+      result = result.filter((task) => task.status === filter);
+    }
+
+    // فیلتر بر اساس اولویت (priority)
+    if (filterProg !== "ALL") {
+      result = result.filter((task) => task.priority === filterProg);
+    }
+
+    return result;
+  }, [tasks, filter, filterProg]);
 
 
 
@@ -90,7 +108,7 @@ export default function Home() {
               📋 تسک‌های من
             </h1>
             <span className="bg-purple-100 text-purple-600 text-xs px-3 py-1 rounded-full font-semibold">
-              {filteredTasks.length} تسک
+              {filteredTasks.length} تعداد تسک 
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -103,23 +121,36 @@ export default function Home() {
           </div>
         </div>
 
-        {/* دکمه افزودن تسک */}
-        <div className="mb-6">
-          <button onClick={handleAdd} className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 
+        {/* دکمه افزودن و حذف تسک */}
+        <div className="mb-6 ">
+          <button onClick={handleAdd} className="px-6 py-3 mx-3 bg-gradient-to-r from-purple-500 to-pink-500 
             hover:from-purple-600 hover:to-pink-600 active:scale-95
             text-white font-bold rounded-xl transition-all duration-200 
             shadow-md hover:shadow-lg text-sm">
             ➕ افزودن تسک جدید
           </button>
+          <button onClick={handleDeleteAll} className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 
+            hover:from-purple-600 hover:to-pink-600 active:scale-95
+            text-white font-bold rounded-xl transition-all duration-200 
+            shadow-md hover:shadow-lg text-sm">
+           حذف تمام تسک ها
+          </button>
         </div>
-
+ 
         {/* فیلترها */}
 <div className="flex flex-wrap gap-2 mb-6">
   <BtnFilter text="همه" filter={filter} setFilter={setFilter} value="ALL" />
   <BtnFilter text="📌 انجام نشده" filter={filter} setFilter={setFilter} value="TODO" />
   <BtnFilter text="⏳ در حال انجام" filter={filter} setFilter={setFilter} value="IN_PROGRESS" />
   <BtnFilter text="✅ انجام شده" filter={filter} setFilter={setFilter} value="DONE" />
+
+  <BtnProg text="همه" filterProg={filterProg} setFilterProg={setFilterProg} value="ALL" />
+  <BtnProg text="کم" filterProg={filterProg} setFilterProg={setFilterProg} value="LOW" />
+  <BtnProg text="متوسط" filterProg={filterProg} setFilterProg={setFilterProg} value="MEDIUM" />
+  <BtnProg text="زیاد" filterProg={filterProg} setFilterProg={setFilterProg} value="HIGH" />
 </div>
+
+
 
         {/* لیست تسک‌ها */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
