@@ -1,13 +1,15 @@
 // component/Modal.tsx
 "use client"
 import { useState, useEffect } from "react";
+import { toPersianDate, isValidPersianDate } from "../utils/DateUtils";
 
 export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingTask }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("MEDIUM");
   const [status, setStatus] = useState("IN_PROGRESS");
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState(""); // ✅ شمسی
+  const [dateError, setDateError] = useState("");
 
   useEffect(() => {
     if (editingTask) {
@@ -15,7 +17,8 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
       setDescription(editingTask.description || "");
       setPriority(editingTask.priority || "MEDIUM");
       setStatus(editingTask.status || "IN_PROGRESS");
-      setDueDate(editingTask.dueDate || "");
+      // ✅ اگر تاریخ میلادی هست به شمسی تبدیل کن
+      setDueDate(editingTask.dueDate ? toPersianDate(editingTask.dueDate) : "");
     } else {
       setTitle("");
       setDescription("");
@@ -25,7 +28,6 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
     }
   }, [editingTask, isOpen]);
 
-  // بستن با دکمه ESC
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") onClose();
@@ -46,7 +48,22 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const taskData = { title, description, priority, status, dueDate };
+    
+    // اعتبارسنجی تاریخ
+    if (dueDate && !isValidPersianDate(dueDate)) {
+      setDateError("فرمت تاریخ باید به صورت ۱۴۰۳/۰۵/۲۰ باشد");
+      return;
+    }
+    setDateError("");
+
+    const taskData = {
+      title,
+      description,
+      priority,
+      status,
+      dueDate: dueDate, // ✅ ذخیره به صورت شمسی
+    };
+    
     if (editingTask) {
       onEditTask({ ...taskData, id: editingTask.id });
     } else {
@@ -61,10 +78,9 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full border border-slate-200/50"
+        className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full border border-slate-200/50 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* هدر */}
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-bold text-slate-700">
             {editingTask ? "✏️ ویرایش تسک" : "➕ تسک جدید"}
@@ -77,7 +93,6 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
           </button>
         </div>
 
-        {/* فرم */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
           <div>
@@ -147,18 +162,36 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
             </div>
           </div>
 
+          {/* ✅ تاریخ شمسی با input text */}
           <div>
             <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
-              تاریخ سررسید
+              📅 تاریخ سررسید (شمسی)
             </label>
             <input
-              type="date"
+              type="text"
               value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
-              focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
-              text-slate-700 transition-all text-sm"
+              onChange={(e) => {
+                setDueDate(e.target.value);
+                setDateError("");
+              }}
+              placeholder="مثال: 1403/05/20"
+              className={`w-full px-4 py-2.5 bg-slate-50 border rounded-xl 
+              focus:ring-2 outline-none transition-all text-sm placeholder:text-slate-400
+              ${dateError ? "border-rose-400 focus:border-rose-400 focus:ring-rose-100" : "border-slate-200 focus:border-emerald-400 focus:ring-emerald-100"}`}
             />
+            {dateError && (
+              <p className="text-xs text-rose-600 mt-1.5">❌ {dateError}</p>
+            )}
+            {dueDate && !dateError && (
+              <p className="text-xs text-emerald-600 mt-1.5">
+                ✅ تاریخ وارد شده: {dueDate}
+              </p>
+            )}
+            {editingTask?.dueDate && !dueDate && (
+              <p className="text-xs text-amber-600 mt-1.5">
+                ⚠️ تاریخ قبلی: {toPersianDate(editingTask.dueDate)}
+              </p>
+            )}
           </div>
 
           <div className="flex gap-3 pt-2">
