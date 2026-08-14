@@ -4,27 +4,27 @@
 function Task({ id, title, description, priority, dueDate, status, onDelete, onEdit }) {
 
   const statusStyles = {
-    TODO: "bg-red-100 text-red-700",
-    IN_PROGRESS: "bg-yellow-100 text-yellow-700",
-    DONE: "bg-green-100 text-green-700",
-  };
-
-  const priorityLabels = {
-    LOW: "🟢 کم",
-    MEDIUM: "🟡 متوسط",
-    HIGH: "🔴 بالا",
-  };
-
-  const priorityColors = {
-    LOW: "text-green-500",
-    MEDIUM: "text-yellow-500",
-    HIGH: "text-red-500",
+    TODO: "bg-rose-50 text-rose-600 border-rose-200/50",
+    IN_PROGRESS: "bg-amber-50 text-amber-600 border-amber-200/50",
+    DONE: "bg-emerald-50 text-emerald-600 border-emerald-200/50",
   };
 
   const statusLabels = {
     TODO: "📌 انجام نشده",
     IN_PROGRESS: "⏳ در حال انجام",
     DONE: "✅ انجام شده",
+  };
+
+  const priorityColors = {
+    LOW: "text-emerald-600 bg-emerald-50",
+    MEDIUM: "text-amber-600 bg-amber-50",
+    HIGH: "text-rose-600 bg-rose-50",
+  };
+
+  const priorityLabels = {
+    LOW: "🟢 کم",
+    MEDIUM: "🟡 متوسط",
+    HIGH: "🔴 زیاد",
   };
 
   const handleDelete = () => {
@@ -35,37 +35,45 @@ function Task({ id, title, description, priority, dueDate, status, onDelete, onE
 
   const handleEdit = () => {
     if (onEdit) {
-      onEdit(); // ✅ صدا زدن تابع ویرایش
+      onEdit();
     }
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-purple-100 hover:shadow-lg hover:border-purple-200 transition-all">
-      <div className="flex items-start justify-between mb-2">
-        <h3 className={`text-gray-800 font-bold text-base ${status === "DONE" ? "line-through text-gray-400" : ""}`}>
+    <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-slate-200/50 hover:border-emerald-200/50 hover:shadow-md hover:shadow-emerald-500/5 transition-all duration-300">
+      
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <h3 className={`text-base font-semibold text-slate-700 leading-tight ${status === "DONE" ? "line-through text-slate-400" : ""}`}>
           {title}
         </h3>
-        <span className={`text-xs px-2 py-1 rounded-full font-medium ${statusStyles[status] || "bg-gray-100 text-gray-700"}`}>
+        <span className={`text-xs px-3 py-1 rounded-full font-medium border ${statusStyles[status] || "bg-slate-50 text-slate-500 border-slate-200/50"}`}>
           {statusLabels[status] || status}
         </span>
       </div>
-      <p className="text-gray-500 text-sm mb-3">{description || "توضیحاتی وارد نشده"}</p>
-      <div className="flex items-center justify-between text-xs">
-        <span className={`font-medium ${priorityColors[priority] || "text-gray-500"}`}>
+      
+      <p className="text-sm text-slate-400 leading-relaxed mb-3 line-clamp-2">
+        {description || "توضیحاتی وارد نشده"}
+      </p>
+      
+      <div className="flex items-center justify-between text-sm">
+        <span className={`px-3 py-0.5 rounded-full font-medium ${priorityColors[priority] || "bg-slate-50 text-slate-500"}`}>
           {priorityLabels[priority] || priority}
         </span>
-        <span className="text-gray-400">{dueDate || "تاریخ مشخص نشده"}</span>
+        <span className="text-slate-400 text-xs">
+          {dueDate || "بدون تاریخ"}
+        </span>
       </div>
-      <div className="flex gap-2 mt-3">
+      
+      <div className="flex gap-2 mt-4 pt-3 border-t border-slate-100">
         <button 
-          onClick={handleEdit} // ✅ کلیک روی دکمه ویرایش
-          className="flex-1 text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all font-medium"
+          onClick={handleEdit}
+          className="flex-1 text-sm px-3 py-2 bg-slate-50 text-slate-500 rounded-lg hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 font-medium"
         >
           ✏️ ویرایش
         </button>
         <button 
           onClick={handleDelete}
-          className="flex-1 text-xs px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all font-medium"
+          className="flex-1 text-sm px-3 py-2 bg-slate-50 text-slate-500 rounded-lg hover:bg-rose-50 hover:text-rose-600 transition-all duration-200 font-medium"
         >
           🗑️ حذف
         </button>

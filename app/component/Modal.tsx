@@ -9,7 +9,6 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
   const [status, setStatus] = useState("IN_PROGRESS");
   const [dueDate, setDueDate] = useState("");
 
-  // ✅ پر کردن فرم با داده‌های تسک برای ویرایش
   useEffect(() => {
     if (editingTask) {
       setTitle(editingTask.title || "");
@@ -18,7 +17,6 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
       setStatus(editingTask.status || "IN_PROGRESS");
       setDueDate(editingTask.dueDate || "");
     } else {
-      // ریست فرم وقتی مودال بسته میشه
       setTitle("");
       setDescription("");
       setPriority("MEDIUM");
@@ -27,41 +25,54 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
     }
   }, [editingTask, isOpen]);
 
+  // بستن با دکمه ESC
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      document.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    const taskData = {
-      title,
-      description,
-      priority,
-      status,
-      dueDate,
-    };
-
+    const taskData = { title, description, priority, status, dueDate };
     if (editingTask) {
-      // ✅ حالت ویرایش
       onEditTask({ ...taskData, id: editingTask.id });
     } else {
-      // ✅ حالت افزودن
       onAddTask(taskData);
     }
-
-    // بستن مودال
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full border border-purple-100">
-        
+    <div 
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full border border-slate-200/50"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* هدر */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg font-bold text-slate-700">
             {editingTask ? "✏️ ویرایش تسک" : "➕ تسک جدید"}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-all text-2xl">
+          <button 
+            onClick={onClose} 
+            className="text-slate-400 hover:text-slate-600 transition-all text-xl hover:rotate-90 duration-200"
+          >
             ✕
           </button>
         </div>
@@ -70,81 +81,83 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
         <form onSubmit={handleSubmit} className="space-y-4">
           
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              📌 عنوان تسک
+            <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
+              عنوان تسک
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="عنوان تسک را وارد کنید..."
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl 
-              focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none 
-              text-gray-700 placeholder:text-gray-400 transition-all"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+              focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+              text-slate-700 placeholder:text-slate-400 transition-all text-sm"
               required
+              autoFocus
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              📝 توضیحات
+            <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
+              توضیحات
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows="3"
               placeholder="توضیحات تسک را وارد کنید..."
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl 
-              focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none 
-              text-gray-700 placeholder:text-gray-400 transition-all resize-none"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+              focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+              text-slate-700 placeholder:text-slate-400 transition-all text-sm resize-none"
             />
           </div>
 
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              🎯 اولویت
-            </label>
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl 
-              focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none 
-              text-gray-700 transition-all"
-            >
-              <option value="LOW">🟢 کم</option>
-              <option value="MEDIUM">🟡 متوسط</option>
-              <option value="HIGH">🔴 بالا</option>
-            </select>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
+                اولویت
+              </label>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+                focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+                text-slate-700 transition-all text-sm"
+              >
+                <option value="LOW">🟢 کم</option>
+                <option value="MEDIUM">🟡 متوسط</option>
+                <option value="HIGH">🔴 زیاد</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
+                وضعیت
+              </label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+                focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+                text-slate-700 transition-all text-sm"
+              >
+                <option value="TODO">📌 انجام نشده</option>
+                <option value="IN_PROGRESS">⏳ در حال انجام</option>
+                <option value="DONE">✅ انجام شده</option>
+              </select>
+            </div>
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              📊 وضعیت
-            </label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl 
-              focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none 
-              text-gray-700 transition-all"
-            >
-              <option value="TODO">📌 انجام نشده</option>
-              <option value="IN_PROGRESS">⏳ در حال انجام</option>
-              <option value="DONE">✅ انجام شده</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              📅 تاریخ سررسید
+            <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
+              تاریخ سررسید
             </label>
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl 
-              focus:border-purple-400 focus:ring-2 focus:ring-purple-200 outline-none 
-              text-gray-700 transition-all"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+              focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+              text-slate-700 transition-all text-sm"
             />
           </div>
 
@@ -152,18 +165,18 @@ export default function Modal({ isOpen, onClose, onAddTask, onEditTask, editingT
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-3 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-xl transition-all font-medium"
+              className="flex-1 px-4 py-2.5 bg-slate-100 text-slate-500 hover:bg-slate-200 rounded-xl transition-all font-medium text-sm"
             >
               لغو
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 
-              hover:from-purple-600 hover:to-pink-600 active:scale-95
-              text-white font-bold rounded-xl transition-all duration-200 
-              shadow-md hover:shadow-lg"
+              className="flex-1 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 
+              hover:from-emerald-600 hover:to-teal-600 active:scale-[0.98]
+              text-white font-medium rounded-xl transition-all duration-200 
+              shadow-md shadow-emerald-500/20 text-sm"
             >
-              {editingTask ? "💾 ذخیره تغییرات" : "✅ افزودن تسک"}
+              {editingTask ? "💾 ذخیره" : "✅ افزودن"}
             </button>
           </div>
         </form>

@@ -58,27 +58,32 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center p-4">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-100 via-gray-50 to-stone-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
-          <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              📝 ثبت‌نام
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-slate-200/50">
+          
+          {/* هدر */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
+              <span className="text-3xl">📝</span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-700">
+              ثبت‌نام
             </h1>
-            <p className="text-purple-200/70 text-sm mt-2 cursor-pointer">
+            <p className="text-slate-400 text-sm mt-1">
               حساب کاربری جدید بسازید
             </p>
           </div>
 
           {success ? (
-            <div className="mb-4 p-4 bg-gradient-to-r from-green-400/20 to-emerald-400/20 border border-green-400/30 rounded-xl text-green-400 text-center backdrop-blur-sm">
+            <div className="mb-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-600 text-center">
               <div className="font-bold">✅ ثبت‌نام با موفقیت انجام شد!</div>
-              <div className="text-sm text-green-400/70 mt-1">در حال انتقال به صفحه ورود...</div>
+              <div className="text-sm text-emerald-500/70 mt-1">در حال انتقال به صفحه ورود...</div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-purple-200/80 text-sm font-medium mb-2">
+                <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
                   نام کاربری
                 </label>
                 <input
@@ -86,15 +91,15 @@ export default function RegisterPage() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="نام کاربری خود را انتخاب کنید..."
-                  className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl 
-                  focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 outline-none 
-                  text-white/90 placeholder:text-white/30 transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+                  focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+                  text-slate-700 placeholder:text-slate-400 transition-all text-sm"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-purple-200/80 text-sm font-medium mb-2">
+                <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
                   رمز عبور
                 </label>
                 <input
@@ -102,16 +107,16 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="رمز عبور خود را وارد کنید..."
-                  className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl 
-                  focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 outline-none 
-                  text-white/90 placeholder:text-white/30 transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+                  focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+                  text-slate-700 placeholder:text-slate-400 transition-all text-sm"
                   required
                   minLength={4}
                 />
               </div>
 
               <div>
-                <label className="block text-purple-200/80 text-sm font-medium mb-2">
+                <label className="block text-slate-600 text-xs font-semibold uppercase tracking-wider mb-1.5">
                   تکرار رمز عبور
                 </label>
                 <input
@@ -119,15 +124,15 @@ export default function RegisterPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="رمز عبور را دوباره وارد کنید..."
-                  className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl 
-                  focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 outline-none 
-                  text-white/90 placeholder:text-white/30 transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl 
+                  focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none 
+                  text-slate-700 placeholder:text-slate-400 transition-all text-sm"
                   required
                 />
               </div>
 
               {error && (
-                <div className="p-3 bg-red-500/20 border border-red-400/30 rounded-xl text-red-400 text-sm text-center">
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-sm text-center">
                   ❌ {error}
                 </div>
               )}
@@ -135,20 +140,19 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full cursor-pointer py-3 bg-gradient-to-r from-purple-500 to-pink-500 
-                hover:from-purple-600 hover:to-pink-600 active:scale-95
-                text-white font-bold rounded-xl transition-all duration-200 
-                shadow-md hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed "
+                className="w-full cursor-pointer py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 
+                hover:from-emerald-600 hover:to-teal-600 active:scale-[0.98]
+                text-white font-medium rounded-xl transition-all duration-200 
+                shadow-md shadow-emerald-500/20 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 {loading ? "⏳ در حال ثبت‌نام..." : "🚀 ثبت‌نام"}
               </button>
             </form>
           )}
 
-          <p className="text-center text-purple-200/60 text-sm mt-6">
+          <p className="text-center text-slate-400 text-sm mt-6">
             قبلاً ثبت‌نام کردید؟{" "}
-            <Link href="/" className="text-purple-400 hover:text-purple-300 font-medium transition-colors
-            ">
+            <Link href="/" className="text-emerald-500 hover:text-emerald-600 font-medium transition-colors">
               ورود
             </Link>
           </p>
