@@ -67,13 +67,17 @@ function Task({ id, title, description, priority, dueDate, status, onDelete, onE
       <div className="flex gap-2 mt-4 pt-3 border-t border-slate-100">
         <button 
           onClick={handleEdit}
-          className="flex-1 text-sm px-3 py-2 bg-slate-50 text-slate-500 rounded-lg hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 font-medium"
+          className="flex-1 text-sm px-3 py-2 bg-slate-50 cursor-pointer
+           text-slate-500 rounded-lg hover:bg-emerald-200 
+           hover:text-emerald-600 transition-all duration-200 font-medium"
         >
           ✏️ ویرایش
         </button>
         <button 
           onClick={handleDelete}
-          className="flex-1 text-sm px-3 py-2 bg-slate-50 text-slate-500 rounded-lg hover:bg-rose-50 hover:text-rose-600 transition-all duration-200 font-medium"
+          className="flex-1 text-sm px-3 py-2 bg-slate-50 cursor-pointer
+          text-slate-500 rounded-lg hover:bg-rose-200 
+          hover:text-rose-600 transition-all duration-200 font-medium"
         >
           🗑️ حذف
         </button>

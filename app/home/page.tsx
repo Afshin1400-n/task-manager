@@ -44,9 +44,10 @@ export default function Home() {
   }, [tasks, user]);
 
   const handleLogout = () => {
-    localStorage.removeItem("currentUser");
-    router.push("/");
-  };
+    if (confirm("آیا مایل به خروج هستید")) {
+         localStorage.removeItem("currentUser");
+      router.push("/")
+    }};
 
   const handleAdd = () => {
     setEditingTask(null);
@@ -62,7 +63,7 @@ export default function Home() {
       }
     }
   };
-
+  
   const handleClose = () => {
     setIsOpen(false);
     setEditingTask(null);
@@ -121,11 +122,11 @@ export default function Home() {
               <span className="text-3xl">📋</span>
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-700 tracking-tight">
+              <h1 className="text-3xl font-bold text-green-700 tracking-tight">
                 تسک‌های من
               </h1>
-              <p className="text-base text-slate-400 font-medium">
-                {filteredTasks.length} تسک فعال
+              <p className="text-base text-slate-700 font-medium">
+                 تسک فعال  {filteredTasks.length}
               </p>
             </div>
           </div>
@@ -135,7 +136,9 @@ export default function Home() {
             </div>
             <button 
               onClick={handleLogout} 
-              className="px-4 py-2.5 text-sm font-medium text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200"
+              className="px-4 py-2.5 text-sm font-medium text-slate-500 bg-white/70
+               hover:text-red-500 hover:bg-red-200 rounded-xl 
+               transition-all duration-200 cursor-pointer"
             >
               🚪 خروج
             </button>
@@ -149,7 +152,7 @@ export default function Home() {
             className="px-7 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 
             hover:from-emerald-600 hover:to-teal-600 active:scale-[0.98]
             text-white font-medium rounded-xl transition-all duration-200 
-            shadow-md shadow-emerald-500/25 hover:shadow-lg text-base flex items-center gap-2"
+            shadow-md shadow-emerald-500/25 hover:shadow-lg text-base flex items-center gap-2 cursor-pointer"
           >
             <span className="text-lg">➕</span> افزودن تسک جدید
           </button>
@@ -158,7 +161,7 @@ export default function Home() {
               onClick={handleDeleteAll} 
               className="px-7 py-3 bg-white/80 text-slate-500 hover:text-red-500 hover:bg-red-50 
               font-medium rounded-xl transition-all duration-200 
-              shadow-sm border border-slate-200/50 text-base flex items-center gap-2"
+              shadow-sm border border-slate-200/50 text-base flex items-center gap-2 cursor-pointer"
             >
               <span className="text-lg">🗑️</span> حذف همه
             </button>
@@ -167,8 +170,8 @@ export default function Home() {
 
         {/* فیلترها */}
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-5 mb-8 border border-slate-200/50 shadow-sm">
-          <div className="flex flex-wrap items-center gap-4">
-            <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider mr-2">وضعیت</span>
+          <div className="flex flex-wrap items-center gap-10">
+            <span className="text-lg font-semibold text-slate-500 uppercase tracking-wider mr-1">وضعیت</span>
             <div className="flex flex-wrap gap-2">
               <BtnFilter text="همه" filter={filter} setFilter={setFilter} value="ALL" />
               <BtnFilter text="📌 انجام نشده" filter={filter} setFilter={setFilter} value="TODO" />
@@ -178,7 +181,7 @@ export default function Home() {
             
             <div className="w-px h-8 bg-slate-200/70 hidden sm:block"></div>
             
-            <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider mr-2">اولویت</span>
+            <span className="text-lg font-semibold text-slate-500 uppercase tracking-wider mr-1">اولویت</span>
             <div className="flex flex-wrap gap-2">
               <BtnProg text="همه" filterProg={filterProg} setFilterProg={setFilterProg} value="ALL" />
               <BtnProg text="🟢 کم" filterProg={filterProg} setFilterProg={setFilterProg} value="LOW" />
