@@ -1,6 +1,6 @@
 # 📋 Task Management App
 
-A modern task management application built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**. Manage your tasks with ease using an intuitive interface with filtering, sorting, and full CRUD operations.
+A modern task management ششش application built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**. Manage your tasks with ease using an intuitive interface with filtering, sorting, and full CRUD operations.
 
 ![Task Management App](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
