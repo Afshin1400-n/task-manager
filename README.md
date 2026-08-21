@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📋 Task Management App
 
-## Getting Started
+A modern task management ششش application built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**. Manage your tasks with ease using an intuitive interface with filtering, sorting, and full CRUD operations.
 
-First, run the development server:
+![Task Management App](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?style=flat-square&logo=tailwind-css)
+![Zustand](https://img.shields.io/badge/Zustand-4-orange?style=flat-square)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- ✅ **Full CRUD Operations** - Create, Read, Update, and Delete tasks
+- 🔍 **Advanced Filtering** - Filter tasks by status (Todo, In Progress, Done)
+- 🎯 **Priority Management** - Set task priorities (Low, Medium, High)
+- 👤 **User Authentication** - Login/Register system with localStorage persistence
+- 💾 **Data Persistence** - Tasks are saved locally per user
+- 📱 **Responsive Design** - Works perfectly on all devices
+- 🎨 **Modern UI** - Glassmorphism design with beautiful gradients
+- 🌿 **Eco-friendly Theme** - Soothing green-teal color palette
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+### Frontend
+- **[Next.js 14](https://nextjs.org/)** - React framework with App Router
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[React Hooks](https://react.dev/reference/react)** - useState, useEffect, useMemo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### State Management
+- **[Zustand](https://zustand-demo.pmnd.rs/)** - Simple and fast state management
+- **[LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)** - Client-side data persistence
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Date Handling
+- **[date-fns-jalali](https://github.com/date-fns/date-fns)** - Persian (Jalali) date support
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📁 Project Structure
