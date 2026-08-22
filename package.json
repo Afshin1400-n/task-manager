@@ -2,12 +2,13 @@
   "name": "task-manager",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "deploy": "npm run build && npx gh-pages -d out"
+},
   "dependencies": {
     "next": "16.3.0",
     "react": "19.2.8",
