@@ -1,4 +1,4 @@
-// component/BtnProg.tsx
+
 "use client";
 
 export default function BtnProg({ text, filterProg, setFilterProg, value }) {

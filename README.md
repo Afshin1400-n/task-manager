@@ -1,42 +1,61 @@
-# 📋 Task Management App
+# ✅ Task Manager
 
-A modern task management ششش application built with **Next.js 14**, **TypeScript**, and **Tailwind CSS**. Manage your tasks with ease using an intuitive interface with filtering, sorting, and full CRUD operations.
+A modern, lightweight task management app built with **Next.js 16**, **TypeScript**, and **Tailwind CSS**.  
+Create, edit, filter, and track your tasks — all in a clean, minimal UI with local persistence.
 
-![Task Management App](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?style=flat-square&logo=tailwind-css)
-![Zustand](https://img.shields.io/badge/Zustand-4-orange?style=flat-square)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
 
 ## ✨ Features
 
-- ✅ **Full CRUD Operations** - Create, Read, Update, and Delete tasks
-- 🔍 **Advanced Filtering** - Filter tasks by status (Todo, In Progress, Done)
-- 🎯 **Priority Management** - Set task priorities (Low, Medium, High)
-- 👤 **User Authentication** - Login/Register system with localStorage persistence
-- 💾 **Data Persistence** - Tasks are saved locally per user
-- 📱 **Responsive Design** - Works perfectly on all devices
-- 🎨 **Modern UI** - Glassmorphism design with beautiful gradients
-- 🌿 **Eco-friendly Theme** - Soothing green-teal color palette
+- 🔐 **Simple Authentication** — Register & login using `localStorage`
+- ➕ **Create Tasks** — Add tasks with title, description, priority, status, and due date
+- ✏️ **Edit Tasks** — Update any task on the fly
+- 🗑️ **Delete Tasks** — Remove individual tasks or wipe them all
+- 🔍 **Filter by Status** — To Do, In Progress, Done
+- 🎯 **Filter by Priority** — Low, Medium, High
+- 📊 **Live Task Counter** — See how many tasks match your filters
+- 💾 **Local Persistence** — Tasks are saved per-user in `localStorage`
+- 🎨 **Modern UI** — Gradient backgrounds, glassmorphism, smooth transitions
+- 📱 **Fully Responsive** — Works great on mobile, tablet, and desktop
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **[Next.js 14](https://nextjs.org/)** - React framework with App Router
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[React Hooks](https://react.dev/reference/react)** - useState, useEffect, useMemo
+| Technology | Purpose |
+|------------|---------|
+| **Next.js 16** | React framework (App Router + Turbopack) |
+| **TypeScript** | Type safety |
+| **Tailwind CSS 4** | Utility-first styling |
+| **React Hooks** | `useState`, `useEffect`, `useMemo` |
 
-### State Management
-- **[Zustand](https://zustand-demo.pmnd.rs/)** - Simple and fast state management
-- **[LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)** - Client-side data persistence
-
-### Date Handling
-- **[date-fns-jalali](https://github.com/date-fns/date-fns)** - Persian (Jalali) date support
+> **No backend required** — Everything runs client-side using `localStorage`.
 
 ---
 
-## 📁 Project Structure
+## 📦 Installation
+
+### Prerequisites
+
+- Node.js **18+**
+- npm / yarn / pnpm
+
+### Steps
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Afshin1400-n/task-manager.git
+
+# 2. Navigate into the project
+cd task-manager
+
+# 3. Install dependencies
+npm install
+
+# 4. Run the development server
+npm run dev

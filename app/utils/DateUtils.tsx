@@ -1,6 +1,6 @@
 // utils/dateUtils.ts
 
-// تبدیل تاریخ میلادی به شمسی (برای نمایش)
+// Convert Gregorian date to Persian (Jalali) for display
 export const toPersianDate = (date: string | Date | null): string => {
   if (!date) return "";
   
@@ -13,18 +13,18 @@ export const toPersianDate = (date: string | Date | null): string => {
   return `${year}/${String(month).padStart(2, "0")}/${String(day).padStart(2, "0")}`;
 };
 
-// تبدیل تاریخ شمسی به میلادی (برای ذخیره)
+// Convert Persian (Jalali) date to Gregorian for storage
 export const toGregorianDate = (persianDate: string): string => {
   if (!persianDate) return "";
   
-  // اینجا میتونی از کتابخونه استفاده کنی یا همون شمسی رو ذخیره کنی
-  // فعلاً همون شمسی رو برمیگردونیم
+  // You can use a library here, or just store the Persian date as-is
+  // For now, we just return the Persian date
   return persianDate;
 };
 
-// اعتبارسنجی تاریخ شمسی
+// Validate Persian date format
 export const isValidPersianDate = (date: string): boolean => {
-  if (!date) return true; // خالی مجاز
+  if (!date) return true; // empty is allowed
   const pattern = /^(\d{4})\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
   return pattern.test(date);
 };
